@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/esp32-tempSensorsNet/FileContentIndex
+/.vs/slnx.sqlite
