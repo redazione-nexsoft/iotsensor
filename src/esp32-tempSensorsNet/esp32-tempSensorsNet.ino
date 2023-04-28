@@ -66,8 +66,8 @@ void loop() {
                   + " sensorid: " + String(SENSORID) + ",\r\n" 
                   + " measures:\r\n" 
                   + " [\r\n" 
-                  + "   { type : 'temperature', value = " + String(data.temperature, 2) + "},\r\n" 
-                  + "   { type : 'humidity', value = " + String(data.humidity, 2) + "}\r\n" 
+                  + "   { type: 'temperature', value: " + String(data.temperature, 2) + "},\r\n" 
+                  + "   { type: 'humidity', value: " + String(data.humidity, 2) + "}\r\n" 
                   + " ]\r\n" 
                   + "}";
 
