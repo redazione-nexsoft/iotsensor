@@ -4,3 +4,11 @@
 
 /.vs/esp32-tempSensorsNet/FileContentIndex
 /.vs/slnx.sqlite
+/src/Apis/.vs
+/.vs/iotsensor
+/.vs/ProjectSettings.json
+*.json
+/src/Apis/MeasuresProbeApi/bin
+/src/Apis/MeasuresProbeApi/obj
+/src/Apis/MeasuresRepositoryApi/bin
+/src/Apis/MeasuresRepositoryApi/obj
