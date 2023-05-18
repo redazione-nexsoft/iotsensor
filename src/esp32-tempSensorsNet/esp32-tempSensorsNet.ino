@@ -9,7 +9,7 @@ const int MEASURE_INTERVAL_MILLISECONDS = 30 * 1000;
 
 const char* const SSID = "Wokwi-GUEST";
 const char* const PASSPHRASE = "";
-const char* const URL = "http://example.org"; // API ingress
+const char* const URL = "http://redazione.nexsoft.it:9091/deviceprobes"; // API ingress
 
 
 const int DHT_PIN = 15;
@@ -51,8 +51,6 @@ void loop() {
   Serial.println(String("Connecting to ") + String(URL));
   HTTPClient http;
   http.setTimeout(15000);
-  //http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-  http.addHeader("Content-Type", "application/json");
      
   // Forming a secure connection with the server before making the request.
   while(!http.begin(URL)) {
@@ -62,19 +60,20 @@ void loop() {
 
   // Forming the request (the hardest part).
   String request = 
-             String("{\r\n") 
-                  + " sensorid: " + String(SENSORID) + ",\r\n" 
-                  + " measures:\r\n" 
-                  + " [\r\n" 
-                  + "   { type: 'temperature', value: " + String(data.temperature, 2) + "},\r\n" 
-                  + "   { type: 'humidity', value: " + String(data.humidity, 2) + "}\r\n" 
-                  + " ]\r\n" 
+             String("{") 
+                  + " \"sensorid\": \"" + String(SENSORID) + "\"," 
+                  + " \"measures\":" 
+                  + " [" 
+                  + "   { \"type\": \"temperature\", \"value\": " + String(data.temperature, 2) + "}," 
+                  + "   { \"type\": \"humidity\", \"value\": " + String(data.humidity, 2) + "}" 
+                  + " ]" 
                   + "}";
 
   Serial.println("");
   Serial.println("Posting request:");
   Serial.println(request);
 
+  http.addHeader("Content-Type", "application/json");
   int httpResponseCode = http.POST(request);
   Serial.println("Getting response");
 
