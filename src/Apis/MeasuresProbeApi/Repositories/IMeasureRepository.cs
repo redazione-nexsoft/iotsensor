@@ -1,6 +1,6 @@
-using MeasuresRepositoryApi.Model;
-
-namespace MeasuresRepositoryApi.Repositories
+using SensorsApi.DBModel;
+ 
+namespace SensorsApi.Repositories
 {
     public interface IMeasureRepository
     {

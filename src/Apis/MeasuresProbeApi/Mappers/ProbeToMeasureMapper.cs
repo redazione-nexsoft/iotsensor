@@ -1,14 +1,14 @@
 using MeasuresProbeApi.DeviceModel;
-using MeasuresProbeApi.DomainModel;
+using SensorsApi.DBModel;
 
 namespace SensorsApi.Mappers
 {
-    public static class ProbeToMeasureMapper 
+	public static class ProbeToMeasureMapper 
 	{
 		 
-		public static DBMeasure Map(DeviceProbe probe, SensorProbe m)
+		public static Measure Map(DeviceProbe probe, SensorProbe m)
 		{
-			return new DBMeasure { sensorid = probe.sensorid, timestamp = DateTime.Now, type = m.type, value = m.value };
+			return new Measure { sensorid = probe.sensorid, timestamp = DateTime.Now, type = m.type, value = m.value };
 		}
 		 
 	}

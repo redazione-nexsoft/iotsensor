@@ -1,8 +1,8 @@
-using MeasuresRepositoryApi.Model;
+using SensorsApi.DBModel;
 
-namespace MeasuresRepositoryApi.Repositories
+namespace SensorsApi.Repositories
 {
-    public class MeasureRepository : IMeasureRepository
+	public class MeasureRepository : IMeasureRepository
 	{
         public async Task<IEnumerable<Measure>> GetMeasures()
 		{

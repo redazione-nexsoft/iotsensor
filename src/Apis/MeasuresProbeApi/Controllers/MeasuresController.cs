@@ -1,10 +1,10 @@
-using MeasuresRepositoryApi.Model;
-using MeasuresRepositoryApi.Repositories;
+using SensorsApi.DBModel;
 using Microsoft.AspNetCore.Mvc;
+using SensorsApi.Repositories;
 
-namespace MeasuresRepositoryApi.Controllers
+namespace SensorsApi.Controllers
 {
-    [ApiController]
+	[ApiController]
 	[Route("[controller]")]
 	public class MeasuresController : ControllerBase
 	{

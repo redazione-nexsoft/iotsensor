@@ -1,6 +1,6 @@
-namespace MeasuresProbeApi.DomainModel
+namespace SensorsApi.DBModel
 {
-    public class DBMeasure
+    public class Measure
     {
         public string sensorid { get; set; }
         public string type { get; set; }

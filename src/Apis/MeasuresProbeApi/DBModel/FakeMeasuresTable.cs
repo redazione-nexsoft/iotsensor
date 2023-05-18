@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace MeasuresRepositoryApi.Model
+namespace SensorsApi.DBModel
 {
     public static class FakeMeasuresTable
     {

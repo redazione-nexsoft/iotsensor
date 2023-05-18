@@ -1,6 +1,7 @@
 using MeasuresProbeApi.DeviceModel;
 using Microsoft.AspNetCore.Mvc;
 using SensorsApi.Mappers;
+using SensorsApi.Repositories;
 
 namespace SensorsApi.Controllers
 {
@@ -9,12 +10,12 @@ namespace SensorsApi.Controllers
 	public class DeviceProbesController : ControllerBase
 	{
 		private readonly ILogger<DeviceProbesController> logger;
-		private readonly HttpClient httpClient;
+		private readonly IMeasureRepository repoMeasures;
 		
-		public DeviceProbesController(IHttpClientFactory httpClientFactory, ILogger<DeviceProbesController> logger)
+		public DeviceProbesController(IMeasureRepository repoMeasures, ILogger<DeviceProbesController> logger)
 		{
 			this.logger = logger;
-			this.httpClient = httpClientFactory.CreateClient("MeasuresRepositoryApi");
+			this.repoMeasures = repoMeasures;
 		}
 
 		[HttpPost(Name = "NotifyProbe")]
@@ -23,9 +24,8 @@ namespace SensorsApi.Controllers
 			logger.Log(LogLevel.Information, $"Probe from sensor: {probe.sensorid}");
 			var tasks = probe.measures.Select(async m =>
 			{
-				var dbRecord = ProbeToMeasureMapper.Map(probe, m);
-				var req = await httpClient.PostAsync("/measures", JsonContent.Create(dbRecord));
-				req.EnsureSuccessStatusCode();
+				var dbMeasure = ProbeToMeasureMapper.Map(probe, m);
+				await repoMeasures.AddMeasure(dbMeasure);
 			});
 			await Task.WhenAll(tasks);
 		}

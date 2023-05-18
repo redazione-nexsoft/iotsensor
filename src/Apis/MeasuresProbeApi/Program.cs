@@ -1,5 +1,7 @@
-using Microsoft.Extensions.Options;
-using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.HttpOverrides;
+using NLog;
+using NLog.Web;
+using SensorsApi.Repositories;
 
 namespace SensorsApi
 {
@@ -7,30 +9,39 @@ namespace SensorsApi
 	{
 		public static void Main(string[] args)
 		{
+			var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+			logger.Debug("init main");
+
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
+			builder.Services.AddScoped<IMeasureRepository, MeasureRepository>();
 			builder.Services.Configure<ServiceSettings>(builder.Configuration.GetSection("ServiceSettings"));
 			builder.Services.AddOptions<ServiceSettings>();
-
-			builder.Services.AddHttpClient("MeasuresRepositoryApi", (serviceProvider, httpClient) =>
-			{
-				var settings = serviceProvider.GetRequiredService<IOptions<ServiceSettings>>().Value;
-
-				httpClient.BaseAddress = new Uri(settings.MeasuresRepositoryApi);
-
-				//// using Microsoft.Net.Http.Headers;
-				//// The GitHub API requires two headers.
-				//httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/vnd.github.v3+json");
-				//httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, "HttpRequestsSample");
-			});
+ 
 
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
+			builder.Logging.ClearProviders();
+			builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+			builder.Host.UseNLog();
+			builder.Host.ConfigureLogging((hostingContext, logging) =>
+			{
+				logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+				logging.AddDebug();
+				logging.AddNLog("nlog.config");
+			});
+
 			var app = builder.Build();
+
+			app.UseForwardedHeaders(new ForwardedHeadersOptions
+			{
+				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+			});
+
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
@@ -39,7 +50,7 @@ namespace SensorsApi
 				app.UseSwaggerUI();
 			}
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
 			app.UseAuthorization();
 
